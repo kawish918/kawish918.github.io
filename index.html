@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kawish Hassan — AI/ML Engineer</title>
+<meta name="description" content="Kawish Hassan — AI/ML Engineer building agentic systems, graph neural networks, and applied deep learning.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg: #0B0C0F;
+    --bg-alt: #14161B;
+    --bg-card: #121419;
+    --border: #23262E;
+    --border-soft: #1A1C22;
+    --text: #E7E5DF;
+    --text-dim: #8A8D94;
+    --text-faint: #55585F;
+    --accent: #5EC8D8;
+    --accent-dim: rgba(94,200,216,0.12);
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+    --sans: 'Inter', -apple-system, sans-serif;
+    --maxw: 920px;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  a{ color: inherit; text-decoration:none; }
+
+  ::selection{ background: var(--accent-dim); color: var(--accent); }
+
+  /* ---------- background graph motif ---------- */
+  #graph-bg{
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  #graph-bg svg{ width:100%; height:100%; }
+  #graph-bg circle{ fill: var(--text-faint); }
+  #graph-bg .n-accent{ fill: var(--accent); }
+  #graph-bg line{ stroke: var(--border); stroke-width: 1; }
+
+  .page{
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ---------- layout helpers ---------- */
+  .wrap{
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+
+  section{ padding: 96px 0; border-bottom: 1px solid var(--border-soft); }
+  section:last-of-type{ border-bottom: none; }
+
+  .eyebrow{
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--accent);
+    letter-spacing: 0.02em;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .eyebrow::before{ content: ''; width: 14px; height: 1px; background: var(--accent); display:inline-block; }
+
+  /* ---------- nav ---------- */
+  nav{
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(11,12,15,0.75);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border-soft);
+  }
+  nav .wrap{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+  }
+  .nav-mark{
+    font-family: var(--mono);
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--text);
+  }
+  .nav-mark span{ color: var(--accent); }
+  .nav-links{
+    display: flex;
+    gap: 28px;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+  .nav-links a{ transition: color 0.15s ease; }
+  .nav-links a:hover{ color: var(--accent); }
+
+  /* ---------- hero ---------- */
+  .hero{
+    padding: 120px 0 96px;
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .hero-path{
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-bottom: 24px;
+  }
+  .hero-path .accent{ color: var(--accent); }
+  h1{
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: clamp(2.1rem, 5.5vw, 3.4rem);
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+    color: var(--text);
+  }
+  .cursor{
+    display:inline-block;
+    width: 0.55ch;
+    background: var(--accent);
+    margin-left: 4px;
+    animation: blink 1.1s step-end infinite;
+  }
+  @keyframes blink{ 50%{ opacity: 0; } }
+
+  .hero-tagline{
+    font-family: var(--sans);
+    font-size: 1.15rem;
+    color: var(--text-dim);
+    max-width: 560px;
+    margin-top: 22px;
+  }
+  .hero-tagline b{ color: var(--text); font-weight: 600; }
+
+  .hero-cta{
+    display: flex;
+    gap: 14px;
+    margin-top: 40px;
+    flex-wrap: wrap;
+  }
+  .btn{
+    font-family: var(--mono);
+    font-size: 13.5px;
+    padding: 11px 20px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+  }
+  .btn-primary{
+    background: var(--accent);
+    color: #0B0C0F;
+    border-color: var(--accent);
+    font-weight: 600;
+  }
+  .btn-primary:hover{ background: #7BD4E2; }
+  .btn-ghost{ color: var(--text-dim); }
+  .btn-ghost:hover{ color: var(--text); border-color: var(--text-dim); }
+
+  /* ---------- section headers ---------- */
+  h2{
+    font-family: var(--mono);
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .section-intro{
+    color: var(--text-dim);
+    max-width: 520px;
+    margin-bottom: 48px;
+    font-size: 0.98rem;
+  }
+
+  /* ---------- work grid ---------- */
+  .work-grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .card{
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+  }
+  .card:hover{
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+  .card-head{
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .card-title{
+    font-family: var(--mono);
+    font-weight: 600;
+    font-size: 1.02rem;
+    color: var(--text);
+  }
+  .card-tag{
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-faint);
+    white-space: nowrap;
+  }
+  .card-desc{
+    color: var(--text-dim);
+    font-size: 0.92rem;
+    line-height: 1.65;
+    flex-grow: 1;
+  }
+  .card-stack{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-top: 18px;
+  }
+  .pill{
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    background: var(--accent-dim);
+    padding: 4px 9px;
+    border-radius: 3px;
+  }
+  .card-link{
+    margin-top: 18px;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--text-dim);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    width: fit-content;
+  }
+  .card-link:hover{ color: var(--accent); }
+  .card-link svg{ width: 12px; height: 12px; transition: transform 0.15s ease; }
+  .card-link:hover svg{ transform: translate(2px, -2px); }
+
+  /* ---------- experience ---------- */
+  .exp-row{
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+  }
+  .exp-role{ font-family: var(--mono); font-weight: 600; font-size: 1.05rem; }
+  .exp-date{ font-family: var(--mono); font-size: 12.5px; color: var(--text-faint); }
+  .exp-org{ color: var(--text-dim); font-size: 0.92rem; margin-bottom: 16px; }
+  .exp-list{ list-style: none; }
+  .exp-list li{
+    color: var(--text-dim);
+    font-size: 0.95rem;
+    padding-left: 20px;
+    position: relative;
+    margin-bottom: 10px;
+    line-height: 1.6;
+  }
+  .exp-list li::before{
+    content: '›';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-family: var(--mono);
+  }
+
+  /* ---------- skills ---------- */
+  .skill-group{ margin-bottom: 26px; }
+  .skill-group:last-child{ margin-bottom: 0; }
+  .skill-label{
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 12px;
+  }
+  .skill-tags{ display: flex; flex-wrap: wrap; gap: 8px; }
+  .skill-tag{
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+    padding: 6px 12px;
+    border-radius: 4px;
+  }
+
+  /* ---------- contact / footer ---------- */
+  .contact-links{
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .contact-link{
+    font-family: var(--mono);
+    font-size: 1.15rem;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border-soft);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: color 0.15s ease;
+  }
+  .contact-link:last-child{ border-bottom: none; }
+  .contact-link:hover{ color: var(--accent); }
+  .contact-link svg{ width: 16px; height: 16px; opacity: 0.5; }
+
+  footer{
+    padding: 40px 0 60px;
+    text-align: center;
+  }
+  footer p{
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-faint);
+  }
+
+  /* ---------- responsive ---------- */
+  @media (max-width: 720px){
+    section{ padding: 64px 0; }
+    .hero{ padding: 88px 0 64px; }
+    .work-grid{ grid-template-columns: 1fr; }
+    .nav-links{ gap: 16px; font-size: 12px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation: none !important; transition: none !important; }
+    html{ scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+
+<div id="graph-bg"><svg id="graph-svg" xmlns="http://www.w3.org/2000/svg"></svg></div>
+
+<div class="page">
+
+  <nav>
+    <div class="wrap">
+      <div class="nav-mark">kawish<span>.</span>hassan</div>
+      <div class="nav-links">
+        <a href="#work">work</a>
+        <a href="#experience">experience</a>
+        <a href="#skills">skills</a>
+        <a href="#contact">contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero wrap">
+    <div class="hero-path">~/kawish-hassan <span class="accent">--about</span></div>
+    <h1>Kawish Hassan<span class="cursor">&nbsp;</span></h1>
+    <p class="hero-tagline">
+      <b>AI/ML Engineer</b> building agentic systems, graph neural networks, and applied deep learning — from training the models to shipping the software around them.
+    </p>
+    <div class="hero-cta">
+      <a href="#work" class="btn btn-primary">View work</a>
+      <a href="mailto:kawish918@gmail.com" class="btn btn-ghost">Get in touch</a>
+      <a href="https://github.com/kawish918" class="btn btn-ghost">GitHub ↗</a>
+    </div>
+  </header>
+
+  <section id="work" class="wrap">
+    <div class="eyebrow">./work</div>
+    <h2>Selected projects</h2>
+    <p class="section-intro">Systems that pair applied ML with real infrastructure — detection engines, autonomous agents, and the platforms that run them.</p>
+
+    <div class="work-grid">
+
+      <div class="card">
+        <div class="card-head">
+          <div class="card-title">SentiNet</div>
+          <div class="card-tag">final year project</div>
+        </div>
+        <p class="card-desc">Adaptive AI-based network intrusion detection & prevention system. A FastAPI central server, React admin dashboard, and Windows endpoint agent run an Autoencoder / LSTM / GNN detection stack, backed by a ReACT-based SOC agent on Llama-3.1-8B-Instruct that reasons over live alerts and recommends response actions.</p>
+        <div class="card-stack">
+          <span class="pill">Python</span><span class="pill">PyTorch</span><span class="pill">FastAPI</span><span class="pill">React</span><span class="pill">PostgreSQL</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <div class="card-title">E-GAT</div>
+          <div class="card-tag">research project</div>
+        </div>
+        <p class="card-desc">A graph neural network for intrusion detection that folds 40-dimensional flow features directly into attention and classification instead of treating each flow in isolation. A pragmatic class-filtering strategy reached 98.63% accuracy with zero failed classes on a 3.1M-flow dataset with 2954:1 class imbalance.</p>
+        <div class="card-stack">
+          <span class="pill">PyTorch</span><span class="pill">Graph Attention</span><span class="pill">GNNs</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <div class="card-title">MediGuard</div>
+          <div class="card-tag">personal project</div>
+        </div>
+        <p class="card-desc">An agentic clinical observability system — a multi-agent command center built on MedGemma, MedASR, and MedSigLIP that autonomously drafts, verifies, and safeguards clinical documentation.</p>
+        <div class="card-stack">
+          <span class="pill">LangGraph</span><span class="pill">Agentic AI</span><span class="pill">Multimodal LLMs</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <div class="card-title">Fixie</div>
+          <div class="card-tag">personal project</div>
+        </div>
+        <p class="card-desc">An AI agent debugger — a multi-agent Python debugging assistant built on LangChain and Ollama (Llama 3.2) that detects bugs, analyzes code logic, and suggests fixes through a coordinated agent workflow.</p>
+        <div class="card-stack">
+          <span class="pill">LangChain</span><span class="pill">Ollama</span><span class="pill">Multi-Agent</span>
+        </div>
+        <a class="card-link" href="https://github.com/kawish918/Fixie-AI-Agent-Debugger">
+          View repo
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="experience" class="wrap">
+    <div class="eyebrow">./experience</div>
+    <h2>Work history</h2>
+
+    <div class="exp-row">
+      <div class="exp-role">AI Intern</div>
+      <div class="exp-date">Jun 2025 — Aug 2025</div>
+    </div>
+    <div class="exp-org">Federal Board of Revenue (FBR), Islamabad</div>
+    <ul class="exp-list">
+      <li>Designed and built a Tax Analysis System that automatically generates complex data queries to surface concealed revenue and tax loopholes from large government datasets.</li>
+      <li>Streamlined the manual query-writing process for auditors, accelerating data-driven, evidence-backed tax audits.</li>
+    </ul>
+  </section>
+
+  <section id="skills" class="wrap">
+    <div class="eyebrow">./skills</div>
+    <h2>Tools & technologies</h2>
+
+    <div class="skill-group">
+      <div class="skill-label">Languages</div>
+      <div class="skill-tags">
+        <span class="skill-tag">Python</span><span class="skill-tag">C++</span><span class="skill-tag">SQL</span>
+      </div>
+    </div>
+
+    <div class="skill-group">
+      <div class="skill-label">ML / AI & Agents</div>
+      <div class="skill-tags">
+        <span class="skill-tag">PyTorch</span><span class="skill-tag">Hugging Face</span><span class="skill-tag">Ollama</span>
+        <span class="skill-tag">LangChain</span><span class="skill-tag">LangGraph</span><span class="skill-tag">Scikit-learn</span>
+        <span class="skill-tag">Graph Neural Networks</span><span class="skill-tag">Agentic AI</span><span class="skill-tag">LLMs</span>
+      </div>
+    </div>
+
+    <div class="skill-group">
+      <div class="skill-label">Vector databases</div>
+      <div class="skill-tags">
+        <span class="skill-tag">Pinecone</span><span class="skill-tag">ChromaDB</span>
+      </div>
+    </div>
+
+    <div class="skill-group">
+      <div class="skill-label">Backend & infra</div>
+      <div class="skill-tags">
+        <span class="skill-tag">FastAPI</span><span class="skill-tag">React</span><span class="skill-tag">PostgreSQL</span>
+        <span class="skill-tag">Firebase</span><span class="skill-tag">Supabase</span><span class="skill-tag">Git</span>
+        <span class="skill-tag">CUDA</span><span class="skill-tag">Linux</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="wrap">
+    <div class="eyebrow">./contact</div>
+    <h2>Let's talk</h2>
+    <p class="section-intro">Open to AI/ML engineering roles. The fastest way to reach me is email.</p>
+
+    <div class="contact-links">
+      <a class="contact-link" href="mailto:kawish918@gmail.com">
+        kawish918@gmail.com
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
+      </a>
+      <a class="contact-link" href="https://github.com/kawish918">
+        github.com/kawish918
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
+      </a>
+      <a class="contact-link" href="https://www.linkedin.com/in/kawishhassan">
+        linkedin.com/in/kawishhassan
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    <p>Built by Kawish Hassan · Multan, Pakistan</p>
+  </footer>
+
+</div>
+
+<script>
+  // ---- generate a sparse node/edge graph background ----
+  (function(){
+    const svg = document.getElementById('graph-svg');
+    const ns = 'http://www.w3.org/2000/svg';
+    const w = window.innerWidth, h = Math.max(window.innerHeight, document.body.scrollHeight);
+    svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+
+    const count = Math.max(18, Math.floor((w * h) / 90000));
+    const nodes = [];
+    for(let i = 0; i < count; i++){
+      nodes.push({ x: Math.random() * w, y: Math.random() * h });
+    }
+
+    const maxDist = Math.min(w, h) * 0.16;
+    for(let i = 0; i < nodes.length; i++){
+      for(let j = i + 1; j < nodes.length; j++){
+        const dx = nodes[i].x - nodes[j].x, dy = nodes[i].y - nodes[j].y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if(dist < maxDist){
+          const line = document.createElementNS(ns, 'line');
+          line.setAttribute('x1', nodes[i].x); line.setAttribute('y1', nodes[i].y);
+          line.setAttribute('x2', nodes[j].x); line.setAttribute('y2', nodes[j].y);
+          line.setAttribute('opacity', (1 - dist / maxDist) * 0.35);
+          svg.appendChild(line);
+        }
+      }
+    }
+
+    nodes.forEach((n, i) => {
+      const c = document.createElementNS(ns, 'circle');
+      c.setAttribute('cx', n.x); c.setAttribute('cy', n.y);
+      c.setAttribute('r', i % 7 === 0 ? 2.4 : 1.6);
+      if(i % 7 === 0) c.setAttribute('class', 'n-accent');
+      svg.appendChild(c);
+    });
+  })();
+</script>
+
+</body>
+</html>
