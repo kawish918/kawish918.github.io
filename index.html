@@ -917,40 +917,6 @@
   }
   body:hover .cursor-glow { opacity: 1; }
 
-  /* ========== STATS ROW ========== */
-  .stats-row {
-    display: flex;
-    gap: 48px;
-    padding-top: 48px;
-    margin-top: 48px;
-    border-top: 1px solid var(--border);
-    flex-wrap: wrap;
-  }
-
-  .stat {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  .stat-value {
-    font-family: var(--sans);
-    font-size: 2rem;
-    font-weight: 800;
-    background: var(--gradient-1);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    line-height: 1;
-  }
-
-  .stat-label {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--text-faint);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-  }
 </style>
 </head>
 <body>
@@ -1005,24 +971,10 @@
           View my work
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H9M17 7V15"/></svg>
         </a>
-        <a href="mailto:kawish918@gmail.com" class="btn btn-ghost">Get in touch</a>
+        <a href="#contact" class="btn btn-ghost">Get in touch</a>
         <a href="https://github.com/kawish918" target="_blank" rel="noopener" class="btn btn-ghost">GitHub ↗</a>
       </div>
 
-      <div class="stats-row">
-        <div class="stat">
-          <div class="stat-value" data-count="5">0</div>
-          <div class="stat-label">Projects shipped</div>
-        </div>
-        <div class="stat">
-          <div class="stat-value" data-count="98" data-suffix="%">0%</div>
-          <div class="stat-label">Best model accuracy</div>
-        </div>
-        <div class="stat">
-          <div class="stat-value" data-count="3" data-suffix=".1M">0</div>
-          <div class="stat-label">Flows processed</div>
-        </div>
-      </div>
     </div>
   </header>
 
@@ -1375,34 +1327,6 @@
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
   })();
 
-  // ===== COUNTER ANIMATION =====
-  (function() {
-    const counters = document.querySelectorAll('.stat-value');
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting && !entry.target.dataset.animated) {
-          entry.target.dataset.animated = 'true';
-          const target = parseInt(entry.target.dataset.count);
-          const suffix = entry.target.dataset.suffix || '';
-          const duration = 1500;
-          const start = performance.now();
-
-          function update(now) {
-            const elapsed = now - start;
-            const progress = Math.min(elapsed / duration, 1);
-            // Ease out expo
-            const eased = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
-            const current = Math.round(eased * target);
-            entry.target.textContent = current + suffix;
-            if (progress < 1) requestAnimationFrame(update);
-          }
-          requestAnimationFrame(update);
-        }
-      });
-    }, { threshold: 0.5 });
-
-    counters.forEach(c => observer.observe(c));
-  })();
 
   // ===== MOBILE NAV TOGGLE =====
   (function() {
