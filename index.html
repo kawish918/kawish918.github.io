@@ -1115,8 +1115,8 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="8"/><path d="M12 7v5l3 2M4 4l3 3"/></svg>
             </span>
             <span>
-              <span class="flow-label" id="node-2-title">Multi-Model + ReACT SOC Agent</span>
-              <span class="flow-sub" id="node-2-sub">AUTOENCODER · LSTM · GNN · LLAMA-3.1-8B</span>
+              <span class="flow-label" id="node-2-title">Dual-Model Voting + EWC Continual Learning</span>
+              <span class="flow-sub" id="node-2-sub">AUTOENCODER · LSTM-AE · GNN · CONCEPT DRIFT · EWC</span>
             </span>
             <span class="flow-index">REASON</span>
           </div>
@@ -1126,8 +1126,8 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M5 12h14M13 6l6 6-6 6"/><path d="M4 5h5M4 19h5"/></svg>
             </span>
             <span>
-              <span class="flow-label" id="node-3-title">FastAPI Server & React SOC UI</span>
-              <span class="flow-sub" id="node-3-sub">POSTGRESQL · ALERT TRIAGE · MITIGATION</span>
+              <span class="flow-label" id="node-3-title">ReACT SOC Agent + React Dashboard</span>
+              <span class="flow-sub" id="node-3-sub">LLAMA-3.1-8B · MCP TOOLS · ALERT TRIAGE</span>
             </span>
             <span class="flow-index">ACTION</span>
           </div>
@@ -1136,6 +1136,7 @@
         <div class="panel-bottom">
           <div class="mini-tags" id="inspector-tags">
             <span class="mini-tag">Intrusion Prevention</span>
+            <span class="mini-tag">Continual Learning</span>
             <span class="mini-tag">Agentic Triage</span>
           </div>
           <a class="panel-jump" href="#projects">Inspect full specs ↓</a>
@@ -1241,11 +1242,13 @@
             </div>
             <h3 class="project-title">SentiNet — Autonomous AI Intrusion Detection & SOC Platform</h3>
             <p class="project-description">
-              An end-to-end AI network intrusion detection and prevention platform combining a Windows endpoint agent, a FastAPI central backend, a React admin dashboard, and an autonomous ReACT SOC agent that reasons over alerts to dispatch mitigation tools.
+              A real-time IDS/IPS platform with a dual-model anomaly engine (Autoencoder + LSTM-AE) achieving <strong style="color:var(--cyan)">F1=0.98</strong> and <strong style="color:var(--cyan)">FPR=5.2%</strong> on CIC-IDS-2023, a GATv2 Graph Neural Network for structural attack detection, an Elastic Weight Consolidation (EWC) continual learning pipeline that prevents catastrophic forgetting, a concept drift detector using Welford online statistics, and a ReACT SOC agent on Llama-3.1-8B that queries live threat intel APIs before reasoning.
             </p>
             <div class="arch-highlights">
-              <div><span>Detection Stack:</span> Hybrid Autoencoder, LSTM & Graph Neural Network (GNN) anomaly models</div>
-              <div><span>Autonomous SOC:</span> Llama-3.1-8B-Instruct ReACT agent for alert correlation & response</div>
+              <div><span>Detection:</span> Autoencoder (12.8K params) + LSTM-AE (135K params) weighted voting + GATv2 GNN (ONNX, 40-feature edges)</div>
+              <div><span>Continual Learning:</span> EWC with diagonal Fisher Information, auto-escalating λ (0→50), replay buffer stability testing</div>
+              <div><span>Concept Drift:</span> Welford online statistics + 3σ z-score monitoring on reconstruction errors, benign-only filtering</div>
+              <div><span>SOC Agent:</span> Llama-3.1-8B ReACT loop with MCP tool-calling (AbuseIPDB + VirusTotal) — zero hallucinated scores</div>
             </div>
             <div class="tags">
               <span class="tag">Python</span>
@@ -1254,24 +1257,31 @@
               <span class="tag">React</span>
               <span class="tag">PySide6</span>
               <span class="tag">PostgreSQL</span>
-              <span class="tag">Ollama</span>
+              <span class="tag">ONNX Runtime</span>
+              <span class="tag">WinDivert</span>
             </div>
             <details class="project-details">
               <summary>Inspect technical architecture</summary>
               <div class="detail-content">
-                <div class="detail-row"><span class="detail-label">Architecture</span><p class="detail-copy">Endpoint monitoring feeds a central FastAPI service and React administrative dashboard, decoupling local packet observation from centralized investigation.</p></div>
-                <div class="detail-row"><span class="detail-label">Detection</span><p class="detail-copy">Multi-model inference pipeline spanning Autoencoders, LSTMs, and Graph Neural Networks (GNNs) to capture both temporal and topological traffic anomalies.</p></div>
-                <div class="detail-row"><span class="detail-label">SOC Agent</span><p class="detail-copy">A ReACT-based agent built around Llama-3.1-8B-Instruct reasons over flagged alerts, retrieves historical context, and recommends or triggers containment actions.</p></div>
+                <div class="detail-row"><span class="detail-label">Architecture</span><p class="detail-copy">Three-tier: Windows PySide6 endpoint agent (WinDivert packet capture, dual-model inline inference) → FastAPI central server (PostgreSQL, GATv2 GNN, enrichment) → React/TypeScript SOC dashboard with WebSocket live feed and 8-tab operational interface.</p></div>
+                <div class="detail-row"><span class="detail-label">Detection</span><p class="detail-copy">Dual-model weighted voting: Standard Autoencoder (per-flow MSE, 98th-percentile threshold) + LSTM-AE (10-flow sliding windows per source IP, autoregressive decoder). Three-tier verdicts: CRITICAL (both fire), LATERAL/STEALTHY (sequence-only), BURST/POLICY (flow-only). Server-side GATv2 GNN detects DDoS, BruteForce, Bot C2, and Infiltration across the full network topology.</p></div>
+                <div class="detail-row"><span class="detail-label">EWC</span><p class="detail-copy">Elastic Weight Consolidation (Kirkpatrick et al., 2017): estimates diagonal Fisher Information from 2,048 benign samples, adds F_i·(θ_i − θ*_i)² penalty during fine-tuning. Lambda auto-escalates: λ=0 on first CL cycle (fully adapt from CIC-23 pre-training), λ=50 on subsequent cycles (protect real-traffic weights). Cycle count persisted in cl_state.json.</p></div>
+                <div class="detail-row"><span class="detail-label">Drift</span><p class="detail-copy">ConceptDriftDetector monitors benign-only reconstruction errors using Welford online mean/variance (O(1) memory). Fires when z-score of the 500-sample recent window exceeds 3σ from the global mean. Attack flows are blocked and never reach the drift detector — preventing false drift from ongoing attacks. Rate-limited to 1 alert per 5 minutes.</p></div>
+                <div class="detail-row"><span class="detail-label">Stability</span><p class="detail-copy">ReplayBuffer (200 samples, persistent .npy) stores pre-CL anomalous flows and tests the new model against them post-training. High replay MSE = stability preserved; falling MSE = catastrophic forgetting detected. Overfitting guard: auto-rollback if val/train loss ratio exceeds 2.0. Threshold floor: clamped at 50% of old threshold.</p></div>
+                <div class="detail-row"><span class="detail-label">SOC Agent</span><p class="detail-copy">ReACT loop (max 5 iterations) on Llama-3.1-8B-Instruct. MCP tools pre-fetch real AbuseIPDB/VirusTotal data before LLM inference — the model reasons over verified threat intel, never fabricates reputation scores. Triages as CRITICAL / SUSPICIOUS / FALSE_POSITIVE / BEACONING with actionable recommendations.</p></div>
+                <div class="detail-row"><span class="detail-label">Security</span><p class="detail-copy">SHA-256 model integrity verification before loading (prevents pickle deserialization attacks). Threat-intel poisoning guard validates captured IPs against AbuseIPDB/VirusTotal before CL — aborts if validation fails. Server-pushed zero-trust config (agents cannot self-whitelist).</p></div>
               </div>
             </details>
           </div>
-          <div class="architecture" role="img" aria-label="SentiNet architecture: Windows endpoint agent, ML detection engines, and central service with SOC agent">
+          <div class="architecture" role="img" aria-label="SentiNet architecture: Windows endpoint agent, ML detection engines, continual learning, and central service with SOC agent">
             <p class="architecture-label">System Data Flow</p>
-            <div class="architecture-node"><span class="architecture-num">01</span><span><strong>Windows Endpoint Agent</strong><small>PySide6 sensor & live traffic capture</small></span></div>
+            <div class="architecture-node"><span class="architecture-num">01</span><span><strong>Endpoint Agent + Packet Capture</strong><small>WinDivert · PySide6 · fast-path detectors</small></span></div>
             <div class="architecture-arrow" aria-hidden="true">↓</div>
-            <div class="architecture-node"><span class="architecture-num">02</span><span><strong>Hybrid Detection Engines</strong><small>Autoencoder · LSTM · GNN inference</small></span></div>
+            <div class="architecture-node"><span class="architecture-num">02</span><span><strong>Dual-Model Voting + Drift Monitor</strong><small>AE · LSTM-AE · EWC CL · concept drift</small></span></div>
             <div class="architecture-arrow" aria-hidden="true">↓</div>
-            <div class="architecture-node"><span class="architecture-num">03</span><span><strong>Central API + ReACT SOC Agent</strong><small>Llama-3.1-8B reasoning & React dashboard</small></span></div>
+            <div class="architecture-node"><span class="architecture-num">03</span><span><strong>GATv2 GNN + ReACT SOC Agent</strong><small>ONNX graph inference · Llama-3.1 MCP tools</small></span></div>
+            <div class="architecture-arrow" aria-hidden="true">↓</div>
+            <div class="architecture-node"><span class="architecture-num">04</span><span><strong>React SOC Dashboard</strong><small>8-tab UI · XAI popups · CL analytics · PDF reports</small></span></div>
           </div>
         </article>
 
@@ -1439,8 +1449,11 @@
             <span class="tag">Hugging Face</span>
             <span class="tag">CNNs / ResNet</span>
             <span class="tag">LSTMs & Autoencoders</span>
-            <span class="tag">Graph Neural Networks (GNNs)</span>
+            <span class="tag">Graph Neural Networks (GATv2)</span>
             <span class="tag">LLMs</span>
+            <span class="tag">Continual Learning (EWC)</span>
+            <span class="tag">Concept Drift Detection</span>
+            <span class="tag">ONNX Runtime</span>
             <span class="tag">CUDA</span>
           </div>
         </article>
@@ -1498,7 +1511,9 @@
           <div class="tags">
             <span class="tag">FastAPI</span>
             <span class="tag">REST APIs</span>
+            <span class="tag">WebSocket</span>
             <span class="tag">React</span>
+            <span class="tag">TypeScript</span>
             <span class="tag">PySide6 (Qt)</span>
             <span class="tag">PostgreSQL</span>
             <span class="tag">Docker</span>
@@ -1562,6 +1577,51 @@
           <p class="education-sub">Bachelor of Science in Computer Science · Focus on AI, Machine Learning & Systems Engineering</p>
         </div>
         <p class="education-date">2022 — 2026</p>
+      </div>
+
+      <!-- Certifications -->
+      <div class="section-head reveal" style="margin-top:48px">
+        <div>
+          <p class="eyebrow">Certifications</p>
+          <h2>Continuous learning.</h2>
+        </div>
+      </div>
+      <div style="display:grid;gap:10px">
+        <div class="education reveal delay-1">
+          <div>
+            <p class="education-title">Machine Learning Specialization</p>
+            <p class="education-sub">DeepLearning.AI</p>
+          </div>
+          <p class="education-date">Coursera</p>
+        </div>
+        <div class="education reveal delay-1">
+          <div>
+            <p class="education-title">AI for Cybersecurity Specialization</p>
+            <p class="education-sub">Johns Hopkins University</p>
+          </div>
+          <p class="education-date">Coursera</p>
+        </div>
+        <div class="education reveal delay-1">
+          <div>
+            <p class="education-title">Advanced Learning Algorithms</p>
+            <p class="education-sub">DeepLearning.AI</p>
+          </div>
+          <p class="education-date">Coursera</p>
+        </div>
+        <div class="education reveal delay-1">
+          <div>
+            <p class="education-title">Building and Training Neural Networks with PyTorch</p>
+            <p class="education-sub">Packt</p>
+          </div>
+          <p class="education-date">Packt</p>
+        </div>
+        <div class="education reveal delay-1">
+          <div>
+            <p class="education-title">Python for Data Science, AI & Development</p>
+            <p class="education-sub">IBM</p>
+          </div>
+          <p class="education-date">Coursera</p>
+        </div>
       </div>
     </section>
 
